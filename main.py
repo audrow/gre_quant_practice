@@ -1,102 +1,143 @@
 import numpy as np
 import datetime
+import random
+import math
 
-def displayProblem(operator, values):
-    for value in values:
-        print value
+def findFactorials(num):
+    tmp = num
+    factorials = []
+    while tmp != 1:
+        divisor = 2
+        while tmp % divisor != 0:
+            divisor += 1
+        tmp /= divisor
+        factorials.append(divisor)
+    return factorials
+
+def getValueInSetAboveValue(value, divisor):
+    while value % divisor != 0:
+        value += 1
+    return value
+
+def getValueInSetBelowValue(value, divisor):
+    value -= 1 # for non inclusive
+    while value % divisor != 0:
+        value += 1
+    return value
 
 
-# def squareNumberD
-
-def getRandomIntDivisibleBy10(minVal, maxVal):
-    return np.random.randint(minVal/10.0,maxVal/10.0)*10
+def getRandomIntDivisibleByNum(minVal, maxVal, divisor):
+    startValue = getValueInSetAboveValue(minVal, divisor)
+    endValue = maxVal
+    return random.choice(np.arange(startValue, endValue, divisor))
 
 def getRandomIntDivisibleBy5(minVal, maxVal):
-    include5 = np.random.randint(0,2)
-    return getRandomIntDivisibleBy10(minVal, maxVal)+(include5*5)
+    return getRandomIntDivisibleByNum(minVal, maxVal, 5)
+
+def getRandomIntDivisibleBy10(minVal, maxVal):
+    return getRandomIntDivisibleByNum(minVal, maxVal, 10)
 
 def getRandomIntEndsIn5(minVal,maxVal):
     return getRandomIntDivisibleBy10(minVal, maxVal)+5
 
+def makeDictForPractice(valArray, ans, question, wrongAnsHint):
+    return {"value" : valArray, 
+            "answer" : ans,
+            "question" : question,
+            "wrong answer hint": wrongAnsHint}
 
 def practiceSquare10s(minVal, maxVal):
     val = getRandomIntDivisibleBy10(minVal, maxVal)
     ans = val**2
-    operator = "^2"
+    question = "What is %s^2?" % val
     wrongAnsHint = "Square nonzero numbers then add the zeros"
-    return {"value" : [val], 
-            "answer" : ans,
-            "operator" : operator,
-            "wrong answer hint": wrongAnsHint}
+    return makeDictForPractice([val], ans, question, wrongAnsHint)
 
-def practiceMultiplying2Nums(minVal, maxVal):
-    val1 = np.random.randint(minVal, maxVal)
-    val2 = np.random.randint(minVal, maxVal)
+def practiceMultiplying2Nums(minVal1, maxVal1, minVal2, maxVal2):
+    val1 = np.random.randint(minVal1, maxVal1)
+    val2 = np.random.randint(minVal2, maxVal2)
     ans = val1*val2
-    operator = "*"
+    question = "What is %s*%s?" % (val1, val2)
     wrongAnsHint = ""
-    return {"value" : [val1, val2], 
-            "answer" : ans,
-            "operator" : operator,
-            "wrong answer hint": wrongAnsHint}
+    return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
 
-def askUserForAnswer(problem, minVal, maxVal):
+def practiceCombinations(maxVal):
+    assert(maxVal > 3)
+    n = np.random.randint(3, maxVal)
+    k = np.random.randint(2, n+1)
+    ans = math.factorial(n) / (math.factorial(k)*math.factorial(n-k))
+    question = "What is %s choose %s?" % (n, k)
+    wrongAnsHint = "n! / (k!*(n-k)!)"
+    return makeDictForPractice([n, k], ans, question, wrongAnsHint)
+    
+def practiceFactorials(minVal, maxVal):
+    val = np.random.randint(minVal, maxVal)
+    ans = findFactorials(val)
+    question = "What are the factorials of %s? Input as a list." % val
+    wrongAnsHint = ""
+    return makeDictForPractice([val], ans, question, wrongAnsHint)
 
-    problemDesc = problem(minVal, maxVal)
+
+def askUserForAnswer(problem):
+    problemDesc = problem()
     vals = problemDesc["value"]
     ans = problemDesc["answer"]
-    operator = problemDesc["operator"]
+    question = problemDesc["question"]
     wrongAnsHint = problemDesc["wrong answer hint"]
-
-    question = ""
-    if len(vals) == 1:
-        question = "What is " + str(vals[0]) + str(operator) + "?\n\t"
-    else:
-        question = "What is "
-        for idx, val in enumerate(vals):
-            if idx < len(vals)-1: # not last element
-                question += str(val) + operator 
-            else:
-                question += str(val)
-
-        question += "?\n\t"
 
     isNotValidEntry = True
     while isNotValidEntry:
-        userInput = raw_input(question)
+        userInput = raw_input(question + "\n\t")
         if set('/*+-^').intersection(userInput):
             print "\nAre you trying to cheat?\n"
             continue
         try:
-            userAns = int(userInput)
+            userAns = float(userInput)
             isNotValidEntry = False
         except:
-            print "\n***Must enter a digit\n"
-            isNotValidEntry = True
+            try:
+                userAns = list(eval(userInput))
+                isNotValidEntry = False
+            except:
+                print "\n***Must enter a digit or list\n"
+                isNotValidEntry = True
 
     if userAns == ans:
         print "Correct!\n"
         return True
     elif wrongAnsHint != "":
-        print "Incorrect: \n\t" + wrongAnsHint + "\n"
+        print "Incorrect! Answer is " + str(ans) + "\n\t" + wrongAnsHint + "\n"
     else:
-        print "Incorrect!\n"
+        print "Incorrect! Answer is " + str(ans) + "\n"
     return False
 
+def runAndTimeQuestions(questions, numQuestionsToAsk):
+    numCorrect = 0;
+    for i in range(0,numQuestionsToAsk):
+        question = random.choice(questions)
+        isCorrect = askUserForAnswer(question)
 
+        if isCorrect:
+            numCorrect += 1
 
-askUserForAnswer(practiceSquare10s, 1, 100)
-askUserForAnswer(practiceMultiplying2Nums,1,21)
+    return numCorrect
+   
+# TODO 
+# - Time + give avg time
+# - Show percent correct
+# - Add relative frequency to functions
+# - Add sexy intro and summary
+# - Add the following
+#       - Square value ending in 5
+#       - Square value + or - known value
+#       - Double and halve multiply
+#       - Divide by 2 and multiply by 10 for multiply by 5
 
-# for i in range(0,100):
-    # getRandomIntDivisibleBy5(0, 100)
-    # print getRandomIntDivisibleBy5(0,100)
+multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
+combinationsLessThan8 = lambda: practiceCombinations(8)
+factorialsLessThan50 = lambda: practiceFactorials(10, 100)
 
-# timeStart =  datetime.datetime.now()
-# print  datetime.datetime.now()
-
-# import time 
-# time.sleep(.5)
-
-# timeEnd =  datetime.datetime.now()
-# print  timeEnd - timeStart
+questions = [multiplyNumsLessThan21, 
+             combinationsLessThan8,
+             factorialsLessThan50]
+runAndTimeQuestions(questions, 10)
