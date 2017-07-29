@@ -3,7 +3,11 @@ import datetime
 import random
 import math
 
+import test # Run tests
+
 def findFactorials(num):
+    if num < 2: raise ValueError('`num` must be greater than 1')
+
     tmp = num
     factorials = []
     while tmp != 1:
@@ -14,12 +18,21 @@ def findFactorials(num):
         factorials.append(divisor)
     return factorials
 
-def getValueInSetAboveValue(value, divisor):
+def findFirstValueWithDivisorAboveValue(value, divisor):
+    if value % 1 != 0: raise ValueError('`value` must not have decimals')
+    if divisor % 1 != 0: raise ValueError('`divisor` must not have decimals')
+    if divisor == 0: raise ValueError('`divisor` must not be 0')
+    if divisor == 0: raise ValueError('`divisor` must not be 0')
+
     while value % divisor != 0:
         value += 1
     return value
 
-def getValueInSetBelowValue(value, divisor):
+def findFirstValueWithDivisorBelowValue(value, divisor):
+    if value % 1 != 0: raise ValueError('`value` must not have decimals')
+    if divisor % 1 != 0: raise ValueError('`divisor` must not have decimals')
+    if divisor == 0: raise ValueError('`divisor` must not be 0')
+
     value -= 1 # for non inclusive
     while value % divisor != 0:
         value += 1
@@ -27,7 +40,8 @@ def getValueInSetBelowValue(value, divisor):
 
 
 def getRandomIntDivisibleByNum(minVal, maxVal, divisor):
-    startValue = getValueInSetAboveValue(minVal, divisor)
+    if minVal >= maxVal: raise ValueError('`minVal` must be less than `maxVal`')
+    startValue = findFirstValueWithDivisorAboveValue(minVal, divisor)
     endValue = maxVal
     return random.choice(np.arange(startValue, endValue, divisor))
 
@@ -64,7 +78,7 @@ def practiceMultiplying2Nums(minVal1, maxVal1, minVal2, maxVal2):
 def practiceCombinations(maxVal):
     assert(maxVal > 3)
     n = np.random.randint(3, maxVal)
-    k = np.random.randint(2, n+1)
+    k = np.random.randint(2, n)
     ans = math.factorial(n) / (math.factorial(k)*math.factorial(n-k))
     question = "What is %s choose %s?" % (n, k)
     wrongAnsHint = "n! / (k!*(n-k)!)"
@@ -123,6 +137,7 @@ def runAndTimeQuestions(questions, numQuestionsToAsk):
     return numCorrect
    
 # TODO 
+# - Press q to quit
 # - Time + give avg time
 # - Show percent correct
 # - Add relative frequency to functions
@@ -133,11 +148,13 @@ def runAndTimeQuestions(questions, numQuestionsToAsk):
 #       - Double and halve multiply
 #       - Divide by 2 and multiply by 10 for multiply by 5
 
-multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
-combinationsLessThan8 = lambda: practiceCombinations(8)
-factorialsLessThan50 = lambda: practiceFactorials(10, 100)
+if __name__ == "__main__":
 
-questions = [multiplyNumsLessThan21, 
-             combinationsLessThan8,
-             factorialsLessThan50]
-runAndTimeQuestions(questions, 10)
+    multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
+    combinationsLessThan8 = lambda: practiceCombinations(8)
+    factorialsLessThan50 = lambda: practiceFactorials(10, 100)
+
+    questions = [multiplyNumsLessThan21, 
+                 combinationsLessThan8,
+                 factorialsLessThan50]
+    runAndTimeQuestions(questions, 10)
