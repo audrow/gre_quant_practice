@@ -207,7 +207,7 @@ def printFeedback(isCorrectList, solveTimeList):
     print "\tCorrect:       \t%s / %s " % (correctAnswers, numQuestions)
     print "\tTotal time:   \t%s seconds\t" % (totalTime)
     print "\tAverage time: \t%s seconds\t" % (avgTime)
-    print "\tSlowest question was question %s (%s seconds) \t" % (longestTimeIdx, solveTimeList[longestTimeIdx])
+    print "\tSlowest question was question %s (%s seconds) \t" % (longestTimeIdx+1, solveTimeList[longestTimeIdx])
    
 
 if __name__ == "__main__":
