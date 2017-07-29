@@ -150,7 +150,7 @@ def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
         startTime =  datetime.datetime.now()
 
         print "Question %s:" % (i+1)
-        question = sampleArray(questions, frequencies)
+        (question, _) = sampleArray(questions, frequencies)
         isCorrect = askUserForAnswerAndPrintResults(question)
 
         endTime = datetime.datetime.now() 
