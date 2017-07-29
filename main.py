@@ -12,11 +12,7 @@ def sampleArray(array, frequencies):
     if sum(frequencies) == 0:
         raise ValueError('`frequencies` must have at least one positive value')
 
-    sumFreq = sum(frequencies)
-    probabilities = []
-    for freq in frequencies:
-        probabilities.append( 1.0*freq/sumFreq )
-
+    probabilities = [1.0*x/sum(frequencies) for x in frequencies]
     randomValue = np.random.rand(1)
     probabilitiesSum = 0.0
     for idx, prob in enumerate(probabilities):
