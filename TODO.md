@@ -4,4 +4,5 @@ TODO
   - Sort by type of question
   - Avergage number correct
   - Average time
+- Redo as MVC
 - Make GUI
