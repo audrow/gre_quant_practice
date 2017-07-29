@@ -75,5 +75,38 @@ class testThings(unittest.TestCase):
             self.assertTrue(valDiv10 % 10 == 0)
             self.assertTrue( (valDiv10EndIn5-5) % 10 == 0)
 
+    def testSampleArrayProbabilities(self):
+        vals = [1, 2, 3] 
+
+        # check integer frequencies
+        freq = [3, 2, 1] 
+        allSelectedIdxs = []
+        for _ in range(100):
+            (val, idxSelected) = main.sampleArray(vals, freq)
+            # check valid index return
+            self.assertGreaterEqual(idxSelected,0)
+            self.assertLess(idxSelected, len(freq))
+
+            allSelectedIdxs.append(idxSelected)
+
+        # check all indexes are being returned
+        allSelectedIdxSet = set(allSelectedIdxs)
+        self.assertEqual(len(allSelectedIdxSet),len(freq))
+
+        # check float frequencies
+        freq = [.3, .2, .1] 
+        for _ in range(100):
+            (val, idxSelected) = main.sampleArray(vals, freq)
+            self.assertGreaterEqual(idxSelected,0)
+            self.assertLess(idxSelected, len(freq))
+
+        # exceptions
+        with self.assertRaises(ValueError): # check equal lengths
+            main.sampleArray([1],[1,4])
+        with self.assertRaises(ValueError): # check negative frequencies
+            main.sampleArray([1,2],[-1,4])
+        with self.assertRaises(ValueError): # check all zero frequencies
+            main.sampleArray([1,2],[0,0])
+
 if __name__ == '__main__':
     unittest.main()

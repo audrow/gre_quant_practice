@@ -3,7 +3,22 @@ import datetime
 import random
 import math
 
-import test # Run tests
+def sampleArray(array, frequencies):
+    if len(array) != len(frequencies): 
+        raise ValueError('`array` and `frequencies` must be the same length')
+    if len(filter(lambda x: x < 0, frequencies)):
+        raise ValueError('`array` and `frequencies` must be positive or zero')
+    if sum(frequencies) == 0:
+        raise ValueError('`frequencies` must have at least one positive value')
+
+
+    probabilities = {1.0*x/sum(frequencies) for x in frequencies}
+    randomValue = np.random.rand(1)
+    probabilitiesSum = 0.0
+    for idx, prob in enumerate(probabilities):
+        probabilitiesSum += prob
+        if randomValue < probabilitiesSum:
+            return (array[idx], idx)
 
 def findFactorials(num):
     if num < 2: raise ValueError('`num` must be greater than 1')
@@ -67,6 +82,29 @@ def practiceSquare10s(minVal, maxVal):
     wrongAnsHint = "Square nonzero numbers then add the zeros"
     return makeDictForPractice([val], ans, question, wrongAnsHint)
 
+def practiceSquareEndsIn5(minVal, maxVal):
+    val = getRandomIntEndsIn5(minVal, maxVal)
+    ans = val**2
+    question = "What is %s^2?" % val
+    wrongAnsHint = "Take number infront of 5, take product with it plus one, prepend to 25"
+    return makeDictForPractice([val], ans, question, wrongAnsHint)
+
+def practiceSquareAdjacentToKnown(minVal, maxVal):
+    isAdd5 = np.random.randint(0,2)
+
+    addOrSubtract = 0
+    if np.random.randint(0,2):
+        addOrSubtract = 1
+    else:
+        addOrSubtract = -1
+
+    val = getRandomIntDivisibleBy10(minVal, maxVal) + isAdd5*5 + addOrSubtract
+    ans = val**2
+    question = "What is %s^2?" % val
+    wrongAnsHint = "n^2 + n + (n+1) = (n+1)^2"
+    return makeDictForPractice([val], ans, question, wrongAnsHint)
+    
+
 def practiceMultiplying2Nums(minVal1, maxVal1, minVal2, maxVal2):
     val1 = np.random.randint(minVal1, maxVal1)
     val2 = np.random.randint(minVal2, maxVal2)
@@ -74,6 +112,11 @@ def practiceMultiplying2Nums(minVal1, maxVal1, minVal2, maxVal2):
     question = "What is %s*%s?" % (val1, val2)
     wrongAnsHint = ""
     return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
+
+def practiceMultiplyingNumBy5(minVal, maxVal):
+    problemDict = practiceMultiplying2Nums(minVal, maxVal, 5, 6)
+    problemDict["wrong answer hint"] = "Divide by 2, then multiply by 10"
+    return problemDict
 
 def practiceCombinations(maxVal):
     assert(maxVal > 4)
@@ -87,13 +130,16 @@ def practiceCombinations(maxVal):
 def practiceFactorials(minVal, maxVal):
     val = np.random.randint(minVal, maxVal)
     ans = findFactorials(val)
-    question = "What are the factorials of %s? Input as a list." % val
+    question = "What are the factorials of %s? Input as a list ([x,y,...])." % val
     wrongAnsHint = ""
     return makeDictForPractice([val], ans, question, wrongAnsHint)
 
 
 
-def runTimeAndGiveMetricsOnQuestions(questions, numQuestionsToAsk):
+def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
+    npQuestionsAndFrequencies = np.array(questionsAndFrequency)
+    questions = list(npQuestionsAndFrequencies[:,0])
+    frequencies = list(npQuestionsAndFrequencies[:,1])
 
     print "\nGRE MATH PRACTICE\n=================\n"
 
@@ -104,8 +150,8 @@ def runTimeAndGiveMetricsOnQuestions(questions, numQuestionsToAsk):
         startTime =  datetime.datetime.now()
 
         print "Question %s:" % (i+1)
-        question = random.choice(questions)
-        isCorrect = askUserForAnswer(question)
+        question = sampleArray(questions, frequencies)
+        isCorrect = askUserForAnswerAndPrintResults(question)
 
         endTime = datetime.datetime.now() 
         timeForEachQuestion.append((endTime-startTime).seconds)
@@ -113,7 +159,7 @@ def runTimeAndGiveMetricsOnQuestions(questions, numQuestionsToAsk):
 
     printFeedback(isCorrectForEachQuestion, timeForEachQuestion)
 
-def askUserForAnswer(problem):
+def askUserForAnswerAndPrintResults(problem):
     problemDesc = problem()
     vals = problemDesc["value"]
     ans = problemDesc["answer"]
@@ -124,7 +170,7 @@ def askUserForAnswer(problem):
     while isNotValidEntry:
         userInput = raw_input("\t" + question + "\n\t")
         if set('/*+-^').intersection(userInput):
-            print "\nAre you trying to cheat?\n"
+            print "\tAre you trying to cheat?\n"
             continue
         try:
             userAns = float(userInput)
@@ -134,14 +180,14 @@ def askUserForAnswer(problem):
                 userAns = list(eval(userInput))
                 isNotValidEntry = False
             except:
-                print "\n***Must enter a digit or list\n"
+                print "\t***Must enter a digit or list\n"
                 isNotValidEntry = True
 
     if userAns == ans:
         print "\tCorrect!\n"
         return True
     elif wrongAnsHint != "":
-        print "\tIncorrect! Answer is " + str(ans) + "\n\t\t" + wrongAnsHint + "\n"
+        print "\tIncorrect! Answer is " + str(ans) + "\n\t***Hint: " + wrongAnsHint + "\n"
     else:
         print "\tIncorrect! Answer is " + str(ans) + "\n"
     return False
@@ -161,23 +207,28 @@ def printFeedback(isCorrectList, solveTimeList):
     print "\tAverage time: \t%s seconds\t" % (avgTime)
     print "\tSlowest question was question %s (%s seconds) \t" % (longestTimeIdx, solveTimeList[longestTimeIdx])
    
-# TODO 
-# - Press q to quit
-# - Add relative frequency to functions
-# - Add sexy intro and summary
-# - Add the following
-#       - Square value ending in 5
-#       - Square value + or - known value
-#       - Double and halve multiply
-#       - Divide by 2 and multiply by 10 for multiply by 5
 
 if __name__ == "__main__":
 
     multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
+    multiplyNumsLessThan50By5 = lambda: practiceMultiplyingNumBy5(10, 50)
     combinationsLessThan8 = lambda: practiceCombinations(8)
-    factorialsLessThan50 = lambda: practiceFactorials(10, 100)
 
-    questions = [multiplyNumsLessThan21, 
-                 combinationsLessThan8,
-                 factorialsLessThan50]
-    runTimeAndGiveMetricsOnQuestions(questions, 2)
+    factorialsLessThan100 = lambda: practiceFactorials(10, 100)
+
+    square10sLessThan200 = lambda: practiceSquare10s(20, 200)
+    squareEndsIn5LessThan200 = lambda: practiceSquareEndsIn5(20, 200)
+    squareSumOfSquaresLessThan100 = lambda: practiceSquareAdjacentToKnown(20, 100)
+
+    numQuestions = 2
+    questionsAndFrequencies = [
+                                [multiplyNumsLessThan21, 10],
+                                [multiplyNumsLessThan50By5, 5],
+                                [combinationsLessThan8, 2],
+                                [factorialsLessThan100, 2],
+                                [square10sLessThan200, 2],
+                                [squareEndsIn5LessThan200, 2],
+                                [squareSumOfSquaresLessThan100, 2]
+                              ]
+    runTimeAndGiveMetricsOnQuestions(questionsAndFrequencies, numQuestions)
+
