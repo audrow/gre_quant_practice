@@ -135,7 +135,6 @@ def practiceFactorials(minVal, maxVal):
     return makeDictForPractice([val], ans, question, wrongAnsHint)
 
 
-
 def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
     if numQuestionsToAsk == 0: return
 
@@ -215,7 +214,7 @@ if __name__ == "__main__":
     # Questions
     multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
     multiplyNumsLessThan50By5 = lambda: practiceMultiplyingNumBy5(10, 50)
-    combinationsLessThan8 = lambda: practiceCombinations(8)
+    combinationsLessThan10 = lambda: practiceCombinations(10)
 
     factorialsLessThan100 = lambda: practiceFactorials(10, 100)
 
@@ -237,15 +236,14 @@ if __name__ == "__main__":
         numQuestions = 10
 
     questionsAndFrequencies = [
-            [multiplyNumsLessThan21, 10],
-            [multiplyNumsLessThan50By5, 5],
-            [combinationsLessThan8, 2],
-            [factorialsLessThan100, 2],
-            [square10sLessThan200, 2],
-            [squareEndsIn5LessThan200, 2],
-            [squareSumOfSquaresLessThan100, 2]
+            # function,                 frequency ]
+            [ multiplyNumsLessThan21,          20 ],
+            [ multiplyNumsLessThan50By5,        8 ],
+            [ combinationsLessThan10,           3 ],
+            [ factorialsLessThan100,            3 ],
+            [ square10sLessThan200,             1 ],
+            [ squareEndsIn5LessThan200,         1 ],
+            [ squareSumOfSquaresLessThan100,    1 ]
           ]
     runTimeAndGiveMetricsOnQuestions(questionsAndFrequencies, numQuestions)
-
-
 
