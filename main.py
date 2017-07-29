@@ -76,9 +76,9 @@ def practiceMultiplying2Nums(minVal1, maxVal1, minVal2, maxVal2):
     return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
 
 def practiceCombinations(maxVal):
-    assert(maxVal > 3)
-    n = np.random.randint(3, maxVal)
-    k = np.random.randint(2, n)
+    assert(maxVal > 4)
+    n = np.random.randint(4, maxVal)
+    k = np.random.randint(2, n-1)
     ans = math.factorial(n) / (math.factorial(k)*math.factorial(n-k))
     question = "What is %s choose %s?" % (n, k)
     wrongAnsHint = "n! / (k!*(n-k)!)"
@@ -92,6 +92,27 @@ def practiceFactorials(minVal, maxVal):
     return makeDictForPractice([val], ans, question, wrongAnsHint)
 
 
+
+def runTimeAndGiveMetricsOnQuestions(questions, numQuestionsToAsk):
+
+    print "\nGRE MATH PRACTICE\n=================\n"
+
+    isCorrectForEachQuestion = []
+    timeForEachQuestion = []
+    for i in range(0,numQuestionsToAsk):
+
+        startTime =  datetime.datetime.now()
+
+        print "Question %s:" % (i+1)
+        question = random.choice(questions)
+        isCorrect = askUserForAnswer(question)
+
+        endTime = datetime.datetime.now() 
+        timeForEachQuestion.append((endTime-startTime).seconds)
+        isCorrectForEachQuestion.append(isCorrect)
+
+    printFeedback(isCorrectForEachQuestion, timeForEachQuestion)
+
 def askUserForAnswer(problem):
     problemDesc = problem()
     vals = problemDesc["value"]
@@ -101,7 +122,7 @@ def askUserForAnswer(problem):
 
     isNotValidEntry = True
     while isNotValidEntry:
-        userInput = raw_input(question + "\n\t")
+        userInput = raw_input("\t" + question + "\n\t")
         if set('/*+-^').intersection(userInput):
             print "\nAre you trying to cheat?\n"
             continue
@@ -117,29 +138,31 @@ def askUserForAnswer(problem):
                 isNotValidEntry = True
 
     if userAns == ans:
-        print "Correct!\n"
+        print "\tCorrect!\n"
         return True
     elif wrongAnsHint != "":
-        print "Incorrect! Answer is " + str(ans) + "\n\t" + wrongAnsHint + "\n"
+        print "\tIncorrect! Answer is " + str(ans) + "\n\t\t" + wrongAnsHint + "\n"
     else:
-        print "Incorrect! Answer is " + str(ans) + "\n"
+        print "\tIncorrect! Answer is " + str(ans) + "\n"
     return False
 
-def runAndTimeQuestions(questions, numQuestionsToAsk):
-    numCorrect = 0;
-    for i in range(0,numQuestionsToAsk):
-        question = random.choice(questions)
-        isCorrect = askUserForAnswer(question)
+def printFeedback(isCorrectList, solveTimeList):
+    numQuestions = len(isCorrectList)
 
-        if isCorrect:
-            numCorrect += 1
+    correctAnswers = sum(isCorrectList)
 
-    return numCorrect
+    totalTime = sum(solveTimeList)
+    avgTime = totalTime/numQuestions
+    longestTimeIdx = solveTimeList.index( max(solveTimeList) )
+
+    print "\nSUMMARY\n======="
+    print "\tCorrect:       \t%s / %s " % (correctAnswers, numQuestions)
+    print "\tTotal time:   \t%s seconds\t" % (totalTime)
+    print "\tAverage time: \t%s seconds\t" % (avgTime)
+    print "\tSlowest question was question %s (%s seconds) \t" % (longestTimeIdx, solveTimeList[longestTimeIdx])
    
 # TODO 
 # - Press q to quit
-# - Time + give avg time
-# - Show percent correct
 # - Add relative frequency to functions
 # - Add sexy intro and summary
 # - Add the following
@@ -157,4 +180,4 @@ if __name__ == "__main__":
     questions = [multiplyNumsLessThan21, 
                  combinationsLessThan8,
                  factorialsLessThan50]
-    runAndTimeQuestions(questions, 10)
+    runTimeAndGiveMetricsOnQuestions(questions, 2)
