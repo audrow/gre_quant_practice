@@ -2,6 +2,7 @@ import numpy as np
 import datetime
 import random
 import math
+import sys
 
 def sampleArray(array, frequencies):
     if len(array) != len(frequencies): 
@@ -11,8 +12,11 @@ def sampleArray(array, frequencies):
     if sum(frequencies) == 0:
         raise ValueError('`frequencies` must have at least one positive value')
 
+    sumFreq = sum(frequencies)
+    probabilities = []
+    for freq in frequencies:
+        probabilities.append( 1.0*freq/sumFreq )
 
-    probabilities = {1.0*x/sum(frequencies) for x in frequencies}
     randomValue = np.random.rand(1)
     probabilitiesSum = 0.0
     for idx, prob in enumerate(probabilities):
@@ -137,6 +141,8 @@ def practiceFactorials(minVal, maxVal):
 
 
 def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
+    if numQuestionsToAsk == 0: return
+
     npQuestionsAndFrequencies = np.array(questionsAndFrequency)
     questions = list(npQuestionsAndFrequencies[:,0])
     frequencies = list(npQuestionsAndFrequencies[:,1])
@@ -210,6 +216,7 @@ def printFeedback(isCorrectList, solveTimeList):
 
 if __name__ == "__main__":
 
+    # Questions
     multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
     multiplyNumsLessThan50By5 = lambda: practiceMultiplyingNumBy5(10, 50)
     combinationsLessThan8 = lambda: practiceCombinations(8)
@@ -220,15 +227,29 @@ if __name__ == "__main__":
     squareEndsIn5LessThan200 = lambda: practiceSquareEndsIn5(20, 200)
     squareSumOfSquaresLessThan100 = lambda: practiceSquareAdjacentToKnown(20, 100)
 
-    numQuestions = 2
+
+    # Setup
+    numQuestions = 0
+    if len(sys.argv) == 2:
+        userInput = sys.argv[1]
+        try:
+            numQuestions = int(userInput)
+        except:
+            print "\nSecond argument must be an integer. Quiting..."
+            exit()
+    else:
+        numQuestions = 10
+
     questionsAndFrequencies = [
-                                [multiplyNumsLessThan21, 10],
-                                [multiplyNumsLessThan50By5, 5],
-                                [combinationsLessThan8, 2],
-                                [factorialsLessThan100, 2],
-                                [square10sLessThan200, 2],
-                                [squareEndsIn5LessThan200, 2],
-                                [squareSumOfSquaresLessThan100, 2]
-                              ]
+            [multiplyNumsLessThan21, 10],
+            [multiplyNumsLessThan50By5, 5],
+            [combinationsLessThan8, 2],
+            [factorialsLessThan100, 2],
+            [square10sLessThan200, 2],
+            [squareEndsIn5LessThan200, 2],
+            [squareSumOfSquaresLessThan100, 2]
+          ]
     runTimeAndGiveMetricsOnQuestions(questionsAndFrequencies, numQuestions)
+
+
 
