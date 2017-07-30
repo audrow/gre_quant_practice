@@ -6,3 +6,4 @@ TODO
   - Average time
 - Redo as MVC
 - Make GUI
+- Add polynomial expansion
