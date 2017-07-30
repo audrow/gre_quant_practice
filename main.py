@@ -75,6 +75,14 @@ def makeDictForPractice(valArray, ans, question, wrongAnsHint):
             "question" : question,
             "wrong answer hint": wrongAnsHint}
 
+
+def practiceSquareInts(minVal, maxVal):
+    val = np.random.randint(minVal, maxVal)
+    ans = val**2
+    question = "What is %s^2?" % val
+    wrongAnsHint = ""
+    return makeDictForPractice([val], ans, question, wrongAnsHint)
+
 def practiceSquare10s(minVal, maxVal):
     val = getRandomIntDivisibleBy10(minVal, maxVal)
     ans = val**2
@@ -130,7 +138,7 @@ def practiceCombinations(maxVal):
 def practiceFactorials(minVal, maxVal):
     val = np.random.randint(minVal, maxVal)
     ans = findFactorials(val)
-    question = "What are the factorials of %s? Input as a list ([x,y,...])." % val
+    question = "What are the factorials smallest to largest of %s? Input as a list ([x,y,...])." % val
     wrongAnsHint = ""
     return makeDictForPractice([val], ans, question, wrongAnsHint)
 
@@ -211,19 +219,8 @@ def printFeedback(isCorrectList, solveTimeList):
 
 if __name__ == "__main__":
 
-    # Questions
-    multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
-    multiplyNumsLessThan50By5 = lambda: practiceMultiplyingNumBy5(10, 50)
-    combinationsLessThan10 = lambda: practiceCombinations(10)
-
-    factorialsLessThan100 = lambda: practiceFactorials(10, 100)
-
-    square10sLessThan200 = lambda: practiceSquare10s(20, 200)
-    squareEndsIn5LessThan200 = lambda: practiceSquareEndsIn5(20, 200)
-    squareSumOfSquaresLessThan100 = lambda: practiceSquareAdjacentToKnown(20, 100)
-
-
-    # Setup
+    # Set number of questions, by command line or default
+    defaultNumOfQuestionsToAsk = 5
     numQuestions = 0
     if len(sys.argv) == 2:
         userInput = sys.argv[1]
@@ -233,17 +230,31 @@ if __name__ == "__main__":
             print "\nSecond argument must be an integer. Quiting..."
             exit()
     else:
-        numQuestions = 10
+        numQuestions = defaultNumOfQuestionsToAsk
+
+    # Questions
+    multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
+    multiplyNumsLessThan50By5 = lambda: practiceMultiplyingNumBy5(10, 51)
+    combinationsLessThan10 = lambda: practiceCombinations(10)
+
+    factorialsLessThan200 = lambda: practiceFactorials(10, 201)
+
+    squareIntsBetween13And20 = lambda: practiceSquareInts(13, 21)
+    square10sLessThan200 = lambda: practiceSquare10s(20, 201)
+    squareEndsIn5LessThan200 = lambda: practiceSquareEndsIn5(20, 201)
+    squareSumOfSquaresLessThan100 = lambda: practiceSquareAdjacentToKnown(20, 101)
 
     questionsAndFrequencies = [
             # function,                 frequency ]
             [ multiplyNumsLessThan21,          20 ],
             [ multiplyNumsLessThan50By5,        8 ],
             [ combinationsLessThan10,           3 ],
-            [ factorialsLessThan100,            3 ],
+            [ factorialsLessThan200,            10 ],
+            [ squareIntsBetween13And20,         10 ],
             [ square10sLessThan200,             1 ],
             [ squareEndsIn5LessThan200,         1 ],
             [ squareSumOfSquaresLessThan100,    1 ]
           ]
+
     runTimeAndGiveMetricsOnQuestions(questionsAndFrequencies, numQuestions)
 
