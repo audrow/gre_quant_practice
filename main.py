@@ -112,6 +112,45 @@ def practiceSquareAdjacentToKnown(minVal, maxVal):
     wrongAnsHint = "n^2 + n + (n+1) = (n+1)^2"
     return makeDictForPractice([val], ans, question, wrongAnsHint)
     
+def practiceAdding2Nums(minVal1, maxVal1, minVal2, maxVal2):
+    val1 = np.random.randint(minVal1, maxVal1)
+    val2 = np.random.randint(minVal2, maxVal2)
+    ans = val1+val2
+    question = "What is %s+%s?" % (val1, val2)
+    wrongAnsHint = ""
+    return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
+
+def practiceSubtracting2Nums(minVal1, maxVal1, minVal2, maxVal2):
+    val1 = np.random.randint(minVal1, maxVal1)
+    val2 = np.random.randint(minVal2, maxVal2)
+    ans = val1-val2
+    question = "What is %s-%s?" % (val1, val2)
+    wrongAnsHint = "Add single value to both terms to get nice number: a-b = (a+k) - (b+k)"
+    return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
+
+def practiceSub2NumsOnesIn2ndNumAreGreater(minVal1, maxVal1, minVal2, maxVal2):
+    tens1 = getRandomIntDivisibleBy10(minVal1, maxVal1)
+    tens2 = getRandomIntDivisibleBy10(minVal2, maxVal2)
+    ones1 = np.random.randint(0,9)
+    ones2 = np.random.randint(ones1,10)
+    val1 = tens1+ones1
+    val2 = tens2+ones2
+    ans = val1-val2
+    question = "What is %s-%s?" % (val1, val2)
+    wrongAnsHint = "Add single value to both terms to get nice number: a-b = (a+k) - (b+k)"
+    return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
+
+def practiceSub2NumsOnesIn2ndNumAreGreaterPos(minVal, maxVal):
+    tens1 = getRandomIntDivisibleBy10(minVal+10, maxVal)
+    tens2 = getRandomIntDivisibleBy10(minVal, tens1)
+    ones1 = np.random.randint(0,9)
+    ones2 = np.random.randint(ones1+1,10)
+    val1 = tens1+ones1
+    val2 = tens2+ones2
+    ans = val1-val2
+    question = "What is %s-%s?" % (val1, val2)
+    wrongAnsHint = "Add single value to both terms to get nice number: a-b = (a+k) - (b+k)"
+    return makeDictForPractice([val1, val2], ans, question, wrongAnsHint)
 
 def practiceMultiplying2Nums(minVal1, maxVal1, minVal2, maxVal2):
     val1 = np.random.randint(minVal1, maxVal1)
@@ -178,7 +217,7 @@ def askUserForAnswerAndPrintResults(problem):
     isNotValidEntry = True
     while isNotValidEntry:
         userInput = raw_input("\t" + question + "\n\t")
-        if set('/*+-^').intersection(userInput):
+        if set('/*+^').intersection(userInput):
             print "\tAre you trying to cheat?\n"
             continue
         try:
@@ -220,7 +259,7 @@ def printFeedback(isCorrectList, solveTimeList):
 if __name__ == "__main__":
 
     # Set number of questions, by command line or default
-    defaultNumOfQuestionsToAsk = 5
+    defaultNumOfQuestionsToAsk = 20
     numQuestions = 0
     if len(sys.argv) == 2:
         userInput = sys.argv[1]
@@ -233,6 +272,11 @@ if __name__ == "__main__":
         numQuestions = defaultNumOfQuestionsToAsk
 
     # Questions
+    add2DigitNums = lambda: practiceAdding2Nums(11, 100, 11, 100)
+    subtract2DigitNums = lambda: practiceSubtracting2Nums(11, 100, 11, 100)
+    sub2DigNums2ndOnesAreGreater = lambda: practiceSub2NumsOnesIn2ndNumAreGreater(11, 100, 11, 100)
+    sub2DigNums2ndOnesAreGreaterPos = lambda: practiceSub2NumsOnesIn2ndNumAreGreaterPos(11, 100)
+    multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
     multiplyNumsLessThan21 = lambda: practiceMultiplying2Nums(3, 21, 3, 21)
     multiplyNumsLessThan50By5 = lambda: practiceMultiplyingNumBy5(10, 51)
     combinationsLessThan10 = lambda: practiceCombinations(10)
@@ -246,13 +290,17 @@ if __name__ == "__main__":
 
     questionsAndFrequencies = [
             # function,                 frequency ]
+            [ add2DigitNums,                    8 ],
+            [ subtract2DigitNums,               5 ],
+            [ sub2DigNums2ndOnesAreGreater,     5 ],
+            [ sub2DigNums2ndOnesAreGreaterPos, 10 ],
             [ multiplyNumsLessThan21,          20 ],
             [ multiplyNumsLessThan50By5,        8 ],
             [ combinationsLessThan10,           3 ],
-            [ factorialsLessThan200,            10 ],
-            [ squareIntsBetween13And20,         10 ],
+            [ factorialsLessThan200,           10 ],
+            [ squareIntsBetween13And20,        10 ],
             [ square10sLessThan200,             1 ],
-            [ squareEndsIn5LessThan200,         1 ],
+            [ squareEndsIn5LessThan200,         5 ],
             [ squareSumOfSquaresLessThan100,    1 ]
           ]
 
