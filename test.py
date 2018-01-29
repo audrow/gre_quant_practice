@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 import main
 
 class testThings(unittest.TestCase):
@@ -49,10 +50,10 @@ class testThings(unittest.TestCase):
         divisor = 2
 
         for i in range(0,100):
-            val = main.getRandomIntDivisibleByNum(minVal,maxVal,divisor)
+            val = main.getRandomIntDivisibleByNum(minVal, maxVal, divisor)
             self.assertGreaterEqual(val, minVal) # inclusive of minVal
             self.assertLess(val, maxVal) # not inclusive of maxVal
-            self.assertTrue(isinstance(val,int))
+            self.assertTrue(isinstance(val, np.integer))
 
         # exceptions
         with self.assertRaises(ValueError): # if minVal > maxVal

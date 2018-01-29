@@ -7,7 +7,7 @@ import sys
 def sampleArray(array, frequencies):
     if len(array) != len(frequencies): 
         raise ValueError('`array` and `frequencies` must be the same length')
-    if len(filter(lambda x: x < 0, frequencies)):
+    if len([x for x in frequencies if x < 0]):
         raise ValueError('`array` and `frequencies` must be positive or zero')
     if sum(frequencies) == 0:
         raise ValueError('`frequencies` must have at least one positive value')
@@ -189,7 +189,7 @@ def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
     questions = list(npQuestionsAndFrequencies[:,0])
     frequencies = list(npQuestionsAndFrequencies[:,1])
 
-    print "\nGRE MATH PRACTICE\n=================\n"
+    print("\nGRE MATH PRACTICE\n=================\n")
 
     isCorrectForEachQuestion = []
     timeForEachQuestion = []
@@ -197,7 +197,7 @@ def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
 
         startTime =  datetime.datetime.now()
 
-        print "Question %s:" % (i+1)
+        print("Question %s:" % (i+1))
         (question, _) = sampleArray(questions, frequencies)
         isCorrect = askUserForAnswerAndPrintResults(question)
 
@@ -216,9 +216,9 @@ def askUserForAnswerAndPrintResults(problem):
 
     isNotValidEntry = True
     while isNotValidEntry:
-        userInput = raw_input("\t" + question + "\n\t")
+        userInput = input("\t" + question + "\n\t")
         if set('/*+^').intersection(userInput):
-            print "\tAre you trying to cheat?\n"
+            print("\tAre you trying to cheat?\n")
             continue
         try:
             userAns = float(userInput)
@@ -228,16 +228,16 @@ def askUserForAnswerAndPrintResults(problem):
                 userAns = list(eval(userInput))
                 isNotValidEntry = False
             except:
-                print "\t***Must enter a digit or list\n"
+                print("\t***Must enter a digit or list\n")
                 isNotValidEntry = True
 
     if userAns == ans:
-        print "\tCorrect!\n"
+        print("\tCorrect!\n")
         return True
     elif wrongAnsHint != "":
-        print "\tIncorrect! Answer is " + str(ans) + "\n\t***Hint: " + wrongAnsHint + "\n"
+        print("\tIncorrect! Answer is " + str(ans) + "\n\t***Hint: " + wrongAnsHint + "\n")
     else:
-        print "\tIncorrect! Answer is " + str(ans) + "\n"
+        print("\tIncorrect! Answer is " + str(ans) + "\n")
     return False
 
 def printFeedback(isCorrectList, solveTimeList):
@@ -249,11 +249,12 @@ def printFeedback(isCorrectList, solveTimeList):
     avgTime = totalTime/numQuestions
     longestTimeIdx = solveTimeList.index( max(solveTimeList) )
 
-    print "\nSUMMARY\n======="
-    print "\tCorrect:       \t%s / %s " % (correctAnswers, numQuestions)
-    print "\tTotal time:   \t%s seconds\t" % (totalTime)
-    print "\tAverage time: \t%s seconds\t" % (avgTime)
-    print "\tSlowest question was question %s (%s seconds) \t" % (longestTimeIdx+1, solveTimeList[longestTimeIdx])
+    print("\nSUMMARY\n=======")
+    print("\tCorrect:       \t%s / %s " % (correctAnswers, numQuestions))
+    print("\tTotal time:   \t%s seconds\t" % (totalTime))
+    print("\tAverage time: \t%s seconds\t" % (avgTime))
+    print("\tSlowest question was question %s (%s seconds) \t" 
+            % (longestTimeIdx+1, solveTimeList[longestTimeIdx]))
    
 
 if __name__ == "__main__":
@@ -266,7 +267,7 @@ if __name__ == "__main__":
         try:
             numQuestions = int(userInput)
         except:
-            print "\nSecond argument must be an integer. Quiting..."
+            print("\nSecond argument must be an integer. Quiting...")
             exit()
     else:
         numQuestions = defaultNumOfQuestionsToAsk
