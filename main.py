@@ -197,7 +197,7 @@ def runTimeAndGiveMetricsOnQuestions(questionsAndFrequency, numQuestionsToAsk):
 
         startTime =  datetime.datetime.now()
 
-        print("Question %s:" % (i+1))
+        print("Question %s:" % (i+1) + "\n")
         (question, _) = sampleArray(questions, frequencies)
         isCorrect = askUserForAnswerAndPrintResults(question)
 
@@ -216,9 +216,9 @@ def askUserForAnswerAndPrintResults(problem):
 
     isNotValidEntry = True
     while isNotValidEntry:
-        userInput = input("\t" + question + "\n\t")
+        userInput = input("\t" + question + "\n\n\t>>> ")
         if set('/*+^').intersection(userInput):
-            print("\tAre you trying to cheat?\n")
+            print("\tAre you trying to cheat?\n\n")
             continue
         try:
             userAns = float(userInput)
@@ -228,16 +228,16 @@ def askUserForAnswerAndPrintResults(problem):
                 userAns = list(eval(userInput))
                 isNotValidEntry = False
             except:
-                print("\t***Must enter a digit or list\n")
+                print("\t***Must enter a digit or list\n\n")
                 isNotValidEntry = True
 
     if userAns == ans:
-        print("\tCorrect!\n")
+        print("\n\tCorrect!\n")
         return True
     elif wrongAnsHint != "":
-        print("\tIncorrect! Answer is " + str(ans) + "\n\t***Hint: " + wrongAnsHint + "\n")
+        print("\n\tIncorrect! Answer is " + str(ans) + "\n\t***Hint: " + wrongAnsHint + "\n")
     else:
-        print("\tIncorrect! Answer is " + str(ans) + "\n")
+        print("\n\tIncorrect! Answer is " + str(ans) + "\n")
     return False
 
 def printFeedback(isCorrectList, solveTimeList):
@@ -260,7 +260,7 @@ def printFeedback(isCorrectList, solveTimeList):
 if __name__ == "__main__":
 
     # Set number of questions, by command line or default
-    defaultNumOfQuestionsToAsk = 20
+    defaultNumOfQuestionsToAsk = 5
     numQuestions = 0
     if len(sys.argv) == 2:
         userInput = sys.argv[1]
