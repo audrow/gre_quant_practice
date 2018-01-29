@@ -177,7 +177,7 @@ def practiceCombinations(maxVal):
 def practiceFactorials(minVal, maxVal):
     val = np.random.randint(minVal, maxVal)
     ans = findFactorials(val)
-    question = "What are the factorials smallest to largest of %s? Input as a list ([x,y,...])." % val
+    question = "What are the factorials - smallest to largest - of %s? Input as a list ([x,y,...])." % val
     wrongAnsHint = ""
     return makeDictForPractice([val], ans, question, wrongAnsHint)
 
