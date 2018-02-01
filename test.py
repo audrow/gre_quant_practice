@@ -1,8 +1,9 @@
 import unittest
 import numpy as np
 import quizzer as qz
+import utils
 
-class testThings(unittest.TestCase):
+class testQuizzer(unittest.TestCase):
 
     def testFindFactorials(self):
         self.assertEqual(qz.findFactorials(2), [2]) # simple repeated
@@ -108,6 +109,51 @@ class testThings(unittest.TestCase):
             qz.sampleArray([1,2],[-1,4])
         with self.assertRaises(ValueError): # check all zero frequencies
             qz.sampleArray([1,2],[0,0])
+
+class testUtils(unittest.TestCase):
+
+    def testIsInts(self):
+        self.assertTrue(utils.isInt(3))
+        self.assertFalse(utils.isInt(3.1))
+        self.assertTrue(utils.isInt(3, greaterThan=2))
+        self.assertFalse(utils.isInt(2, greaterThan=2))
+        self.assertTrue(utils.isInt(3, greaterThan=2, lessThan=5))
+        self.assertFalse(utils.isInt(6, greaterThan=2, lessThan=5))
+        self.assertTrue(utils.isInt(-6, greaterThan=-7, lessThan=0))
+
+    def testIsIntsFromStrings(self):
+        self.assertTrue(utils.isInt('3'))
+        self.assertFalse(utils.isInt('3.1'))
+        self.assertTrue(utils.isInt('3', greaterThan='2'))
+        self.assertFalse(utils.isInt('2', greaterThan='2'))
+        self.assertTrue(utils.isInt('3', greaterThan='2', lessThan='5'))
+        self.assertFalse(utils.isInt('6', greaterThan='2', lessThan='5'))
+        self.assertTrue(utils.isInt('-6', greaterThan='-7', lessThan='0'))
+
+    def testIsIntsGivenJunkString(self):
+        self.assertRaises(ValueError, utils.isInt, '6.101.0')
+        self.assertRaises(ValueError, utils.isInt, 'foo')
+
+    def testPositiveInts(self):
+        self.assertFalse(utils.isPositivInt(-1))
+        self.assertFalse(utils.isPositivInt(-1, lessThan=10))
+        self.assertTrue(utils.isPositivInt(1, lessThan=10))
+        self.assertFalse(utils.isPositivInt(11, lessThan=10))
+
+    def testPositiveIntsFromStrings(self):
+        self.assertFalse(utils.isPositivInt('-1'))
+        self.assertFalse(utils.isPositivInt('-1', lessThan='10'))
+        self.assertTrue(utils.isPositivInt('1', lessThan='10'))
+        self.assertFalse(utils.isPositivInt('11', lessThan='10'))
+
+    def testIsPositiveIntsGivenJunkString(self):
+        self.assertRaises(ValueError, utils.isPositivInt, '6.101.0')
+        self.assertRaises(ValueError, utils.isPositivInt, 'foo')
+
+
+    def testPositiveIntsMixWithStrings(self):
+        self.assertFalse(utils.isPositivInt(-1, lessThan='10'))
+        self.assertTrue(utils.isPositivInt('1', lessThan=10))
 
 if __name__ == '__main__':
     unittest.main()
