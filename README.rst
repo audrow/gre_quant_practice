@@ -68,7 +68,28 @@ An example of a training session looks like:
 
 	SUMMARY
 	=======
-		Correct:       	3 / 4 
-		Total time:   	40 seconds	
-		Average time: 	10 seconds	
-		Slowest question was question 4 (18 seconds)a
+		Correct:       	3 / 4
+		Total time:   	40 seconds
+		Average time: 	10 seconds
+		Slowest question was question 4 (18 seconds)
+
+Adding New Questions
+--------------------
+If you wish to add new questions, follow the following steps:
+
+1. Create a function that returns a dictionary fo the same form as the
+   other questions
+2. Make a lambda function for that function to fill in the specific
+   parameters (if there are no parameters just pass the function handle
+3. Add your function with a relative frequency to the
+   :code:`questionsAndFrequencies` variable in main
+
+Setup
+-----
+
+1. Clone the repository.
+2. Install dependencies in the requirements (just NumPy)
+3. Run the quizzer with ``python main.py``
+    * You can use ``--num_questions`` or ``-n`` to set the number of questions
+
+
