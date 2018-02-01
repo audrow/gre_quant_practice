@@ -1,7 +1,20 @@
+"""
+    quizzer.py
+    ~~~~~~~~~~
+
+    This file contains the guts of the gre_quant_practice project, including
+    the questions, question ordering, and the user terminal interface.
+
+    :copyright: (c) 2018 by Audrow Nash
+    :license: MIT, see LICENSE for more details.
+"""
+
+
 import numpy as np
 import datetime
 import random
 import math
+
 
 def sampleArray(array, frequencies):
     if len(array) != len(frequencies):

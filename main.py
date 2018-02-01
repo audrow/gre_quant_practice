@@ -1,3 +1,25 @@
+"""
+    main.py
+    ~~~~~~~
+
+    In this file the quiz is put together. At the top, there are questions
+    where the user can adjust the range of various problem parameters.
+    Beneath the questions, the user can control the relative frequency that
+    questions are asked.
+
+    If you wish to add new questions, follow the following steps:
+
+        1. Create a function that returns a dictionary fo the same form as the
+           other questions
+        2. Make a lambda function for that function to fill in the specific
+           parameters (if there are no parameters just pass the function handle
+        3. Add your function with a relative frequency to the
+           :code:`questionsAndFrequencies` variable in main
+
+    :copyright: (c) 2018 by Audrow Nash
+    :license: MIT, see LICENSE for more details.
+"""
+
 import quizzer as qz
 import utils
 

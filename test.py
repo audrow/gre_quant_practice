@@ -1,3 +1,5 @@
+"""Tests for the GRE Quantitative Practice Project"""
+
 import unittest
 import numpy as np
 import quizzer as qz
